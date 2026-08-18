@@ -51,7 +51,13 @@ func (t *TrayIndex) Count(tray string) int {
 }
 
 func WrapClassDenied(op, class string) error {
-	return errors.New(op + ": class " + class + ": " + ErrMailClass.Error())
+	if strings.TrimSpace(op) == "" {
+		op = "class-check"
+	}
+	if strings.TrimSpace(class) == "" {
+		class = "unknown"
+	}
+	return fmt.Errorf("%s: class %s: %w", op, class, ErrMailClass)
 }
 
 func WaitInduction(ctx context.Context, d time.Duration) error {
